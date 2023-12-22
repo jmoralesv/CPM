@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-class Program
+﻿class Program
 {
     static void Main()
     {
@@ -31,7 +27,6 @@ class Program
         return maxEndNodeTime - minStartNodeTime;
     }
 
-
     static void PrintActivityTable(List<Activity> activities, Dictionary<string, int> earliestStartTimes, Dictionary<string, int> latestStartTimes)
     {
         Console.WriteLine("Activity From-To\tDuration\tEarliest Start Time\tLatest Start Time");
@@ -43,25 +38,25 @@ class Program
 
     static List<Activity> GetSampleActivities()
     {
-        return new List<Activity>
-        {
-            new Activity("V1", "V2", 6),
-            new Activity("V1", "V3", 4),
-            new Activity("V1", "V4", 5),
-            new Activity("V2", "V5", 1),
-            new Activity("V3", "V5", 1),
-            new Activity("V4", "V6", 2),
-            new Activity("V5", "V7", 9),
-            new Activity("V5", "V8", 7),
-            new Activity("V6", "V8", 4),
-            new Activity("V7", "V9", 2),
-            new Activity("V8", "V9", 4),
-        };
+        return
+        [
+            new("V1", "V2", 6),
+            new("V1", "V3", 4),
+            new("V1", "V4", 5),
+            new("V2", "V5", 1),
+            new("V3", "V5", 1),
+            new("V4", "V6", 2),
+            new("V5", "V7", 9),
+            new("V5", "V8", 7),
+            new("V6", "V8", 4),
+            new("V7", "V9", 2),
+            new("V8", "V9", 4),
+        ];
     }
 
     static Dictionary<string, int> CalculateEarliestStartTimes(List<Activity> activities)
     {
-        Dictionary<string, int> earliestStartTimes = new Dictionary<string, int>();
+        Dictionary<string, int> earliestStartTimes = [];
 
         var startNodes = activities.Select(a => a.From).Except(activities.Select(a => a.To)).ToList();
 
@@ -92,7 +87,7 @@ class Program
 
     static Dictionary<string, int> CalculateLatestStartTimes(List<Activity> activities, Dictionary<string, int> earliestStartTimes)
     {
-        Dictionary<string, int> latestStartTimes = new Dictionary<string, int>();
+        Dictionary<string, int> latestStartTimes = [];
 
         foreach (var activity in activities)
         {
@@ -107,16 +102,4 @@ class Program
     }
 }
 
-class Activity
-{
-    public string From { get; }
-    public string To { get; }
-    public int Duration { get; }
-
-    public Activity(string from, string to, int duration)
-    {
-        From = from;
-        To = to;
-        Duration = duration;
-    }
-}
+record Activity(string From, string To, int Duration);
