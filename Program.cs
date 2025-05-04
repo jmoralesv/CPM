@@ -9,13 +9,13 @@
 
         PrintActivityTable(activities, earliestStartTimes, latestStartTimes);
 
-        int projectDuration = CalculateProjectDuration(activities, earliestStartTimes);
+        int projectDuration = CalculateProjectDuration(earliestStartTimes);
         Console.WriteLine($"Project Duration: {projectDuration}");
 
         Console.ReadKey();
     }
 
-    static int CalculateProjectDuration(List<Activity> activities, Dictionary<string, int> earliestStartTimes)
+    static int CalculateProjectDuration(Dictionary<string, int> earliestStartTimes)
     {
         // Find the maximum earliest start time among all end nodes
         int maxEndNodeTime = earliestStartTimes.Values.Max();
@@ -77,9 +77,10 @@
         {
             var newStartTime = earliestStartTimes[node] + edge.Duration;
 
-            if (!earliestStartTimes.ContainsKey(edge.To) || earliestStartTimes[edge.To] < newStartTime)
+            if (!earliestStartTimes.TryGetValue(edge.To, out int value) || value < newStartTime)
             {
-                earliestStartTimes[edge.To] = newStartTime;
+                value = newStartTime;
+                earliestStartTimes[edge.To] = value;
                 UpdateEarliestStartTimes(edge.To, activities, earliestStartTimes);
             }
         }
@@ -92,9 +93,10 @@
         foreach (var activity in activities)
         {
             var latestStartTime = earliestStartTimes[activity.To] - activity.Duration;
-            if (!latestStartTimes.ContainsKey(activity.From) || latestStartTimes[activity.From] > latestStartTime)
+            if (!latestStartTimes.TryGetValue(activity.From, out int value) || value > latestStartTime)
             {
-                latestStartTimes[activity.From] = latestStartTime;
+                value = latestStartTime;
+                latestStartTimes[activity.From] = value;
             }
         }
 
